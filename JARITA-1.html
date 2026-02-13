@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Poem For You ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+font-family:'Playfair Display',serif;
+overflow:hidden;
+text-align:center;
+color:white;
+}
+
+/* VIDEO BACKGROUND */
+.video-bg{
+position:fixed;
+top:0;
+left:0;
+width:100vw;
+height:100vh;
+object-fit:cover;
+z-index:-2;
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.55);
+z-index:-1;
+}
+
+h3{
+margin-top:25px;
+font-size:clamp(24px,6vw,42px);
+letter-spacing:2px;
+font-family:'Great Vibes',cursive;
+}
+
+/* POETRY BOX FIXED */
+#poetryBox{
+width:min(90vw,430px);
+margin:25px auto;
+background:rgba(0,0,0,0.55);
+border-radius:25px;
+padding:25px;
+font-size:clamp(18px,5vw,24px);
+line-height:1.7;
+backdrop-filter:blur(12px);
+box-shadow:0 0 25px rgba(255,255,255,0.15);
+max-height:45vh;
+overflow-y:auto;
+scroll-behavior:smooth;
+}
+
+/* BUTTONS */
+.buttonRow{
+display:flex;
+gap:10px;
+justify-content:center;
+flex-wrap:wrap;
+margin-top:15px;
+opacity:0;
+transition:.6s;
+}
+
+button{
+padding:12px 18px;
+border:none;
+border-radius:25px;
+background:#ff4d6d;
+color:white;
+font-size:15px;
+cursor:pointer;
+transition:.3s;
+font-family:'Playfair Display',serif;
+}
+button:hover{transform:scale(1.1);}
+
+/* YES SCREEN */
+#yesScreen{
+position:fixed;
+inset:0;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+background:rgba(60,0,15,0.95);
+font-size:clamp(28px,8vw,60px);
+z-index:20;
+font-family:'Great Vibes',cursive;
+}
+
+/* EMOJIS */
+.emoji{
+position:fixed;
+bottom:-40px;
+font-size:30px;
+animation:floatUp linear forwards;
+}
+
+@keyframes floatUp{
+to{
+transform:translateY(-120vh) scale(1.4);
+opacity:0;
+}
+}
+
+/* MUSIC HINT */
+#musicHint{
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(0,0,0,0.5);
+padding:8px 16px;
+border-radius:20px;
+font-size:14px;
+opacity:0;
+transition:.5s;
+z-index:20;
+}
+</style>
+</head>
+
+<body>
+
+<video class="video-bg" autoplay muted loop playsinline>
+<source src="Jarita.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<h3>🌹 If only my heart could speak…<br>This is what it would say 🌹</h3>
+
+<div id="poetryBox"></div>
+
+<div id="musicHint">🎧 Tap anywhere to feel the moment</div>
+
+<div class="buttonRow">
+<button id="yesBtn">Yes… of course ❤️</button>
+<button id="noBtn">I was always yours 😌</button>
+</div>
+
+<div id="yesScreen">
+❤️ I am glad you accepted. 🌹💫
+</div>
+
+<audio id="bgMusic" loop>
+<source src="sing2.m4a" type="audio/mpeg">
+</audio>
+
+<script>
+const poetryBox=document.getElementById("poetryBox");
+const buttonRow=document.querySelector(".buttonRow");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const yesScreen=document.getElementById("yesScreen");
+const music=document.getElementById("bgMusic");
+const hint=document.getElementById("musicHint");
+
+const emojis=["❤️","💖","✨","🎉","💘","🥰","💫"];
+
+const lines=[
+"Hey Trouble,",
+"Really wish i could put this on a signboard but...🤷🏾‍♂️,",
+"Anyway there's no one else I'll have be my valentine ,",
+"other than Mummy dearest.",
+"Whether as friends or more I'm grateful for you.",
+"I know our story isn't simple but I still choose you,",
+"even in the small simple ways.",
+"People wish for perfect valentine but I wish for you.",
+"I have just one question left to ask —",
+"WILL YOU BE MY VAL? ❤️"
+];
+
+let currentLine=0;
+
+function typeLine(line,callback){
+
+let charIndex=0;
+const p=document.createElement("p");
+poetryBox.appendChild(p);
+
+const interval=setInterval(()=>{
+
+p.textContent+=line[charIndex];
+charIndex++;
+
+poetryBox.scrollTop=poetryBox.scrollHeight;
+
+if(charIndex>=line.length){
+clearInterval(interval);
+setTimeout(callback,900);
+}
+
+},90); // slower typing
+}
+
+function typeNextLine(){
+if(currentLine<lines.length){
+typeLine(lines[currentLine],typeNextLine);
+currentLine++;
+}else{
+buttonRow.style.opacity=1;
+}
+}
+
+typeNextLine();
+
+/* MUSIC FIX */
+music.play().catch(()=>{
+hint.style.opacity="1";
+
+const startMusic=()=>{
+music.play();
+hint.style.opacity="0";
+setTimeout(()=>hint.style.display="none",600);
+document.removeEventListener("click",startMusic);
+};
+
+document.addEventListener("click",startMusic);
+});
+
+/* YES HANDLING */
+yesBtn.onclick=handleYes;
+noBtn.onclick=handleYes;
+
+function handleYes(){
+yesScreen.style.display="flex";
+startEmojiExplosion();
+
+setTimeout(()=>{
+window.location.href="vals2.html";
+},4000);
+}
+
+function startEmojiExplosion(){
+setInterval(()=>{
+const e=document.createElement("div");
+e.className="emoji";
+e.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+e.style.left=Math.random()*100+"vw";
+e.style.animationDuration=(3+Math.random()*3)+"s";
+document.body.appendChild(e);
+setTimeout(()=>e.remove(),6000);
+},200);
+}
+</script>
+
+</body>
+</html>
+
+
+

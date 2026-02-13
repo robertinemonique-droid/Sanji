@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>She Said Yes!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+flex-direction:column;
+background:linear-gradient(180deg,#2b000a,#4a0014);
+color:white;
+text-align:center;
+font-family:'Playfair Display',serif;
+}
+
+/* MESSAGE BOX */
+.messageBox{
+background:rgba(90,20,30,0.45);
+padding:35px;
+border-radius:30px;
+font-size:clamp(24px,6vw,42px);
+backdrop-filter:blur(12px);
+box-shadow:0 0 40px rgba(255,120,160,0.25);
+z-index:10;
+max-width:90vw;
+}
+
+/* FADE LINES */
+.fadeLine{
+opacity:0;
+transform:translateY(20px);
+transition:all 1.5s ease;
+margin:10px 0;
+font-family:'Great Vibes',cursive;
+font-size:clamp(28px,7vw,46px);
+letter-spacing:1px;
+}
+
+.fadeLine.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* FLOATING EMOJIS */
+.emoji{
+position:fixed;
+bottom:-40px;
+font-size:28px;
+animation:floatCinema linear forwards;
+z-index:2;
+}
+
+/* FLOATING VIDEOS */
+.floatVideo{
+position:fixed;
+bottom:-140px;
+border-radius:18px;
+overflow:hidden;
+pointer-events:none;
+animation:floatCinema linear forwards;
+box-shadow:0 0 25px rgba(255,150,180,0.4);
+}
+
+.floatVideo video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.depth-near{width:160px;z-index:6;}
+.depth-mid{width:120px;opacity:.85;z-index:5;}
+.depth-far{width:90px;opacity:.6;z-index:4;filter:blur(1px);}
+
+@keyframes floatCinema{
+0%{transform:translateY(0) scale(.9);opacity:0;}
+20%{opacity:1;}
+100%{transform:translateY(-130vh) scale(1.2);opacity:0;}
+}
+
+/* MUSIC HINT */
+#musicHint{
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(0,0,0,0.5);
+padding:8px 16px;
+border-radius:20px;
+font-size:14px;
+opacity:0;
+transition:.5s;
+z-index:20;
+}
+</style>
+</head>
+
+<body>
+
+<div class="messageBox" id="messageBox"></div>
+
+<div id="musicHint">🎧 Tap anywhere to feel the moment</div>
+
+<audio id="bgMusic" loop>
+<source src="Ocean_of_dream.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* 🌹 FADE-IN ROMANTIC TEXT */
+const lines=[
+"🌹 Roses are red,",
+"Violets are blue,",
+"In a thousand lifetimes,",
+"my heart would still choose you, Sanji. 🌹"
+];
+
+const box=document.getElementById("messageBox");
+
+lines.forEach((text,i)=>{
+const div=document.createElement("div");
+div.className="fadeLine";
+div.textContent=text;
+box.appendChild(div);
+
+setTimeout(()=>{
+div.classList.add("show");
+},1500*i);
+});
+
+/* 🎵 MUSIC */
+const music=document.getElementById("bgMusic");
+const hint=document.getElementById("musicHint");
+
+music.play().catch(()=>{
+hint.style.opacity="1";
+
+const startMusic=()=>{
+music.play();
+hint.style.opacity="0";
+setTimeout(()=>hint.style.display="none",600);
+document.removeEventListener("click",startMusic);
+};
+
+document.addEventListener("click",startMusic);
+});
+
+/* 🎬 FLOATING VIDEOS */
+const floatingVideos=["AAA.mp4","JJ12.mp4","sss.mp4"];
+
+function createFloatingVideo(){
+
+const container=document.createElement("div");
+const depth=["depth-near","depth-mid","depth-far"];
+container.className="floatVideo "+depth[Math.floor(Math.random()*depth.length)];
+
+const vid=document.createElement("video");
+vid.src=floatingVideos[Math.floor(Math.random()*floatingVideos.length)];
+vid.autoplay=true;
+vid.muted=true;
+vid.loop=true;
+vid.playsInline=true;
+
+container.appendChild(vid);
+
+container.style.left=Math.random()*100+"vw";
+container.style.animationDuration=(8+Math.random()*6)+"s";
+
+document.body.appendChild(container);
+
+setTimeout(()=>container.remove(),14000);
+}
+
+setInterval(createFloatingVideo,3500);
+
+/* 💘 FLOATING EMOJIS */
+const emojis=["❤️","🔥","🎉","✨","💖","🥰","😍","💘","💕","🎊","🎈","🎵"];
+
+setInterval(()=>{
+const e=document.createElement("div");
+e.className="emoji";
+e.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+e.style.left=Math.random()*100+"vw";
+e.style.animationDuration=(6+Math.random()*4)+"s";
+document.body.appendChild(e);
+setTimeout(()=>e.remove(),10000);
+},30000);
+
+/* 💬 WHATSAPP REDIRECT */
+setTimeout(()=>{
+window.location.href="https://wa.me/233593537756?text=I%20want%20to%20be%20your%20val%20now%20and%20forever%20";
+},30000);
+
+</script>
+
+</body>
+</html>
+
+
+
+
